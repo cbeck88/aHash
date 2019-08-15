@@ -12,6 +12,7 @@
 //! It uses two rounds of AES per hash. So it should not be considered cryptographically secure.
 #![cfg_attr(not(test), no_std)]
 //#![feature(core_intrinsics)]
+#[cfg(feature = "const_random")]
 extern crate const_random;
 #[cfg(test)]
 extern crate no_panic;
@@ -25,6 +26,7 @@ mod aes_hash;
 #[cfg(test)]
 mod hash_quality_test;
 
+#[cfg(feature = "const_random")]
 use const_random::const_random;
 use core::hash::{BuildHasher};
 use core::sync::atomic::AtomicUsize;
@@ -89,7 +91,10 @@ impl Default for AHasher {
     /// ```
     #[inline]
     fn default() -> AHasher {
+        #[cfg(feature = const_random)]
         AHasher::new_with_keys(const_random!(u64), const_random!(u64))
+        #[cfg(not(feature = const_random))]
+        AHasher::new_with_keys(0u64, 0u64)
     }
 }
 

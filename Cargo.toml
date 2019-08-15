@@ -40,8 +40,8 @@ lto = 'fat'
 debug-assertions = false
 codegen-units = 1
 
-[dependencies]
-const-random = "0.1.6"
+[build-dependencies]
+const-random = { version = "0.1.6", optional = true }
 
 [dev-dependencies]
 no-panic = "0.1.10"
